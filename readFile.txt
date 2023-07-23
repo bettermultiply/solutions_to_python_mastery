@@ -1,0 +1,15 @@
+How to Take the Course
+To take the course, you should first fork/clone the GitHub repo to your own machine.
+
+It is assumed that you are working locally in a proper Python development environment. That means a proper installation of Python, an editor/IDE, and whatever other tools that you would normally install to work on Python. Due to the use of multiple files and module imports, the use of Notebooks is not recommended.
+
+The PythonMastery.pdf file contains detailed presentation slides. Course exercises and suggested timings are clearly indicated. You'll want to keep this by your side (I recommend downloading and viewing it with a local PDF viewer). Start here!
+
+The Exercises/ directory has all of the course exercises.
+
+The Solutions/ directory has fully worked out solution code.
+
+The Data/ directory has some datafiles used during the course.
+
+The course was originally taught over 4-5 days in an in-person classroom setting with a mix of lecture and hands-on exercises. Successful completion of the course will likely require 30-50 hours of work. Exercises tend to build upon each other. Solutions are always provided in case you get stuck.Append
+Append

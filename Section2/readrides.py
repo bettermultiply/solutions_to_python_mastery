@@ -1,7 +1,10 @@
+import collections
 import csv
 import dataclasses
 import tracemalloc
 from collections import namedtuple
+
+file = '../Data/ctabus.csv'
 
 
 class RowClass:
@@ -25,6 +28,41 @@ class RowSlots:
 named_rows = namedtuple('named_rows', ['route', 'date', 'day_type', 'rides'])
 
 
+class RideData(collections.abc.Sequence):
+    def __init__(self):
+        self.route = []
+        self.date = []
+        self.day_type = []
+        self.rides = []
+
+    def __len__(self):
+        return len(self.route)
+
+    def __getitem__(self, index):
+        if isinstance(index, slice):
+            new_ride = RideData()
+            for i in range(index.start, index.stop):
+                new_ride.append(self[i])
+            return new_ride
+
+        return {
+            'route': self.route[index],
+            'date': self.date[index],
+            'day_type': self.day_type[index],
+            'rides': self.rides[index],
+        }
+
+    # def __repr__(self):
+    #     pass
+
+    def append(self, item):
+        self.route.append(item['route'])
+        self.date.append(item['date'])
+        self.day_type.append(item['day_type'])
+        self.rides.append(item['rides'])
+
+
+
 def read_rides_as_tuples(filename):
     records = []
     with open(filename) as f:
@@ -41,7 +79,8 @@ def read_rides_as_tuples(filename):
 
 
 def read_rides_as_dictionary(filename):
-    records = []
+    # records = []
+    records = RideData()
     with open(filename) as f:
         rows = csv.reader(f)
         headings = next(rows)
@@ -93,10 +132,27 @@ def read_rides_as_named_rows(filename):
     return records
 
 
-if __name__ == '__main__':
-    tracemalloc.start()
-    rowS = read_rides_as_slots('../Data/ctabus.csv')
-    print('Memory Use: Current %d, Peak %d' % tracemalloc.get_traced_memory())
+def read_rides_as_columns(filename):
+    routes = []
+    dates = []
+    day_type = []
+    num_rides = []
+    with open(filename) as f:
+        rows = csv.reader(f)
+        heading = next(rows)
+        for row in rows:
+            routes.append(row[0])
+            dates.append(row[1])
+            day_type.append(row[2])
+            num_rides.append(int(row[3]))
+    return dict(routes=routes, dates=dates, day_type=day_type, num_rides=num_rides)
+
+
+
+# if __name__ == '__main__':
+#     tracemalloc.start()
+#     rowS = read_rides_as_slots('../Data/ctabus.csv')
+#     print('Memory Use: Current %d, Peak %d' % tracemalloc.get_traced_memory())
 
 # >>> routes = {s.route for s in rowS}
 

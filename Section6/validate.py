@@ -1,3 +1,29 @@
+import inspect
+
+
+class ValidatedFunction:
+    def __init__(self, func):
+        self.func = func
+        self.signature = inspect.signature(func)
+        self.annotations = dict(func.__annotations__)
+        self.ret_check = self.annotations.pop('return', None)
+
+    def __call__(self, *args, **kwargs):
+        print('Calling', self.func.__name__)
+
+        bind = self.signature.bind(*args, **kwargs)
+
+        for name, val in self.annotations.items():
+            val.check(bind.arguments[name])
+
+        result = self.func(*args, **kwargs)
+
+        if self.ret_check:
+            self.ret_check.check(result)
+
+        return result
+
+
 class Validator:
     def __init__(self, name=None):
         self.name = name

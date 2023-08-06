@@ -4,8 +4,8 @@ from structure import Structure
 class Stock(Structure):
     _fields = ('name', 'shares', 'price')
 
-    def __init__(self, name, shares, price):
-        self._init()
+    # def __init__(self, name, shares, price):
+    #     self._init()
 
     @property
     def cost(self):
@@ -17,3 +17,7 @@ class Stock(Structure):
 
 class Date(Structure):
     _fields = ('year', 'month', 'day')
+
+
+# Stock.set_fields()
+Stock.create_init()

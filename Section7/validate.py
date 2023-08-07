@@ -1,5 +1,6 @@
 import inspect
 from functools import wraps
+from inspect import signature
 
 
 def validated(func):
@@ -39,7 +40,7 @@ class Typed(Validator):
     @classmethod
     def check(cls, value):
         if not isinstance(value, cls.expected_type):
-            raise TypeError(f'Expected {cls.expected_type}')
+            raise TypeError(f'Expected {cls.expected_type} but get {value.__class__}')
         return super().check(value)
 
 
@@ -114,3 +115,13 @@ def enforce(**annotations):
             return result
         return wrapper
     return decorate
+
+
+_typed_classes = [
+    ('Integer', int),
+    ('Float', float),
+    ('String', str)
+]
+
+globals().update((name, type(name, (Typed,), {"expected_type": ty}))
+                 for name, ty in _typed_classes)

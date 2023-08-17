@@ -1,9 +1,20 @@
 import sys
 import inspect
 from validate import Validator, validated
+from collections import ChainMap
 
 
-class Structure:
+class StructureMeta(type):
+    @classmethod
+    def __prepare__(metacls, name, bases):
+        return ChainMap({}, Validator.validators)
+
+    def __new__(meta, name, bases, methods):
+        methods = methods.maps[0]
+        return super().__new__(meta, name, bases, methods)
+
+
+class Structure(metaclass=StructureMeta):
     _fields = ()
     _types = ()
     # def __init__(self, *value):
@@ -77,5 +88,3 @@ def validate_attributes(cls):
     cls._types = list(types)
     cls.create_init()
     return cls
-
-

@@ -20,11 +20,17 @@ def validated(func):
 
 
 class Validator:
+    validators = {}
+
     def __init__(self, name=None):
         self.name = name
 
     def __set_name__(self, owner, name):
         self.name = name
+
+    @classmethod
+    def __init_subclass__(cls):
+        cls.validators[cls.__name__] = cls
 
     @classmethod
     def check(cls, value):

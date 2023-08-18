@@ -1,5 +1,4 @@
-from structly.structure import Structure
-
+from structly import *
 class Stock(Structure):
     name = String()
     shares = PositiveInteger()
@@ -14,8 +13,7 @@ class Stock(Structure):
 
 
 if __name__ == '__main__':
-    from structly.reader import read_csv_as_instances
-    from structly.tableformat import create_formatter, print_table_2
+    # from structly import read_csv_as_instances, create_formatter, print_table_2
 
     portfolio = read_csv_as_instances('../Data/portfolio.csv', Stock)
     formatter = create_formatter('text')

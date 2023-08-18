@@ -3,6 +3,8 @@ from Section9 import stock
 import logging
 
 
+__all__ = ['read_csv_as_instances']
+
 log = logging.getLogger(__name__)
 logging.basicConfig(level=logging.DEBUG)
 

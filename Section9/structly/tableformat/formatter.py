@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
 
 
+__all__ = ['create_formatter', 'print_table_2']
+
+
 def print_table(portfolio, attrs: list):
     print(''.join('%10s ' % attr for attr in attrs))
     print(('-'*10+' ')*len(attrs))
@@ -20,29 +23,9 @@ class TableFormatter(ABC):
         pass
 
 
-class TextTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print(' '.join('%10s' % h for h in headers))
-        print(('_'*10 + ' ')*len(headers))
-
-    def row(self, rowdata):
-        print(' '.join('%10s' % r for r in rowdata))
-
-
-class CSVTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print(','.join('%s' % h for h in headers))
-
-    def row(self, rowdata):
-        print(','.join('%s' % r for r in rowdata))
-
-
-class HTMLTableFormatter(TableFormatter):
-    def headings(self, headers):
-        print(' '.join('<th>%s</th>' % h for h in headers))
-
-    def row(self, rowdata):
-        print(' '.join('<td>%s</td>' % r for r in rowdata))
+from .formats.text import TextTableFormatter
+from .formats.csv import CSVTableFormatter
+from .formats.html import HTMLTableFormatter
 
 
 def print_table_2(records, fields, formatter):

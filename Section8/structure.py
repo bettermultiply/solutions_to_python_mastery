@@ -32,7 +32,7 @@ class Structure(metaclass=StructureMeta):
 
     @classmethod
     def from_row(cls, row):
-        print(cls._types)
+        # print(cls._types)
         rowdata = [func(val) for func, val in zip(cls._types, row)]
         return cls(*rowdata)
 

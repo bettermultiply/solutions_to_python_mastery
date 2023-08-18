@@ -29,3 +29,14 @@ def printer():
     while True:
         item = yield
         print(item, end='')
+
+
+@consumer
+def printer():
+    while True:
+        try:
+            item = yield
+            print(item)
+        except Exception as e:
+            print('ERROR: %r' % e)
+            

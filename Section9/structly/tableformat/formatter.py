@@ -12,6 +12,13 @@ def print_table(portfolio, attrs: list):
 
 
 class TableFormatter(ABC):
+    _formats = {}
+
+    @classmethod
+    def __init_subclass__(cls, **kwargs):
+        name = cls.__module__.split('.')[-1]
+        TableFormatter._formats[name] = cls
+
     @abstractmethod
     def headings(self, headers):
         # raise NotImplementedError()
@@ -21,11 +28,6 @@ class TableFormatter(ABC):
     def row(self, rowdata):
         # raise NotImplementedError()
         pass
-
-
-from .formats.text import TextTableFormatter
-from .formats.csv import CSVTableFormatter
-from .formats.html import HTMLTableFormatter
 
 
 def print_table_2(records, fields, formatter):
@@ -52,15 +54,13 @@ class ColumnFormatMixin:
         super().row(rowdata)
 
 
-def create_formatter(formatter: str):
-    if formatter.lower() == 'text':
-        return TextTableFormatter()
-    elif formatter.lower() == 'csv':
-        return CSVTableFormatter()
-    elif formatter.lower() == 'html':
-        return HTMLTableFormatter()
-    else:
-        raise TypeError('Unknown Format %s' % formatter)
+def create_formatter(formatter: str, upper_headers=False):
+    if formatter not in TableFormatter._formats:
+        __import__(f'{__package__}.formats.{formatter}')
+    formatter_cls = TableFormatter._formats.get(formatter)
+    if not formatter_cls:
+        raise RuntimeError('Unknown format %s' % formatter)
+    return formatter_cls()
 
 
 def create_table_2(formatter: str, column_formats=None, upper_headers=False):
